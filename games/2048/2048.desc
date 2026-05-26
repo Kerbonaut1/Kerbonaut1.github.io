@@ -1,4 +1,4 @@
 title: 2048
 genre: puzzle
-description: Puzzle game
+description: 2048 is a sliding tile puzzle game where you combine matching numbers on a grid to create larger values, aiming to reach the 2048 tile before running out of moves.
 new: true
