@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Jingo Games Unblocked — Play</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #070b14;
+  --surface: #0c1224;
+  --card: #111a33;
+  --border: #1e2a4a;
+
+  --accent: #6495ed;
+  --accent2: #a9c4ff;
+
+  --text: #f5f7ff;
+  --muted: #b6c2e2;
+
+  --glow: 0 0 24px rgba(100,149,237,.35);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* GRID BACKGROUND (same as homepage) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(0,240,160,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,240,160,.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,.07) 2px,
+    rgba(0,0,0,.07) 4px
+  );
+  pointer-events: none;
+}
+
+.page { position: relative; z-index: 1; }
+
+/* ───── NAV ───── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  background: rgba(8,9,13,.85);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  text-decoration: none;
+}
+.logo span { color: var(--accent2); }
+
+/* ───── MAIN LAYOUT (GAME + ADS FLEXIBLE) ───── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* GAME WRAPPER */
+.game-wrap {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* iframe */
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* FULLSCREEN BUTTON */
+.fs-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+
+  font-family: 'DM Sans', sans-serif;
+  font-size: .82rem;
+  font-weight: 500;
+
+  padding: 6px 16px;
+  border-radius: 20px;
+
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+
+  cursor: pointer;
+  transition: .15s;
+}
+
+.fs-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--glow);
+}
+
+/* ───── ADS (AUTO SCALE) ───── */
+.ad-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.ad-slot {
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+
+  min-height: 120px;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+/* ───── RECOMMENDED SECTION ───── */
+.recommended {
+  margin-top: 8px;
+}
+
+.section-title {
+  font-family: 'Orbitron', monospace;
+  font-size: .75rem;
+  letter-spacing: .15em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+/* cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(100,149,237,.15);
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .ad-row {
+    grid-template-columns: 1fr;
+  }
+
+  .game-wrap {
+    height: 60vh;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="index.html">
+    Jingo<span>Games</span> Unblocked
+  </a>
+</nav>
+
+<!-- GAME -->
+<div class="layout">
+
+  <div class="game-wrap">
+    <iframe id="gameFrame" allow="fullscreen"></iframe>
+
+    <button class="fs-btn" onclick="fullscreen()">
+      Fullscreen
+    </button>
+  </div>
+
+  <!-- ADS (SCALING ROW) -->
+  <div class="ad-row">
+    <div class="ad-slot">Ad Space (Flexible)</div>
+    <div class="ad-slot">Ad Space (Flexible)</div>
+  </div>
+
+  <!-- RECOMMENDED BELOW -->
+  <div class="recommended">
+    <div class="section-title">Recommended Games</div>
+    <div id="recommended"></div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const game = params.get("game");
+
+document.getElementById("gameFrame").src =
+  `games/${game}/index.html`;
+
+function fullscreen() {
+  const frame = document.getElementById("gameFrame");
+  if (frame.requestFullscreen) frame.requestFullscreen();
+}
+
+/* recommended */
+fetch("games/index.json")
+  .then(r => r.json())
+  .then(list => {
+    const box = document.getElementById("recommended");
+
+    list.filter(g => g !== game).slice(0, 8).forEach(g => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.textContent = g;
+
+      div.onclick = () => {
+        window.location.href = `play.html?game=${g}`;
+      };
+
+      box.appendChild(div);
+    });
+  });
+</script>
+
+</body>
+</html>

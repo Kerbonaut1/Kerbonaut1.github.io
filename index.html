@@ -30,7 +30,7 @@
     
       /* Soft blue glow */
       --glow:    0 0 24px rgba(100,149,237,.35);
-    }}
+    }
 
     html { scroll-behavior: smooth; }
 
@@ -600,7 +600,7 @@ function renderGrid(games) {
         : '';
 
     return `
-    <a class="game-card" href="games/${game.folder}/index.html" target="_blank" rel="noopener noreferrer" style="animation-delay:${i * 0.04}s">
+    <a class="game-card" href="play.html?game=${game.folder}" style="animation-delay:${i * 0.04}s">
       <div class="thumb-placeholder" style="background:${gradient}">
         ${emoji}
         <div class="play-overlay">
