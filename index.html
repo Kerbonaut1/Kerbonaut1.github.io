@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArcadeVault — Play Free Games</title>
+  <title>Jingo Games Unblocked — Play Free Games</title>
 
   <!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
   <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
@@ -385,7 +385,7 @@
 
   <!-- NAV -->
   <nav>
-    <a class="logo" href="index.html">Arcade<span>Vault</span></a>
+    <a class="logo" href="index.html">Jingo<span>Games</span>Unblocked</span></a>
     <div class="search-wrap">
       <input type="text" placeholder="Search games…" id="searchInput" oninput="applyFilters()">
       <span class="search-icon">⌕</span>
@@ -440,7 +440,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <span>© 2026 ArcadeVault — Free browser games, unblocked.</span>
+    <span>© 2026 Jingo Games Unblocked — Free browser games, unblocked.</span>
     <div class="footer-links">
       <a href="#">Privacy</a>
       <a href="#">Contact</a>
@@ -554,7 +554,7 @@ async function loadGames() {
         <span class="icon">📂</span>
         No games found. Add folders to <code>games/</code> and update <code>games/index.json</code>.
       </div>`;
-    console.warn('ArcadeVault:', err.message);
+    console.warn('Jingo Games:', err.message);
   }
 }
 
@@ -594,7 +594,7 @@ function renderGrid(games) {
         : '';
 
     return `
-    <a class="game-card" href="games/${game.folder}/index.html" style="animation-delay:${i * 0.04}s">
+    <a class="game-card" href="games/${game.folder}/index.html" target="_blank" rel="noopener noreferrer" style="animation-delay:${i * 0.04}s">
       <div class="thumb-placeholder" style="background:${gradient}">
         ${emoji}
         <div class="play-overlay">
