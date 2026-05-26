@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArcadeVault — Play Free Games</title>
+
+  <!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #08090d;
+      --surface:  #0e1018;
+      --card:     #13151f;
+      --border:   #1e2233;
+      --accent:   #00f0a0;
+      --accent2:  #7b5ff8;
+      --text:     #e8eaf0;
+      --muted:    #5a5f78;
+      --glow:     0 0 24px rgba(0,240,160,.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Grid background ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,240,160,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,160,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Scanline overlay ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,.08) 2px,
+        rgba(0,0,0,.08) 4px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      background: rgba(8,9,13,.85);
+      position: sticky; top: 0; z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 1.25rem;
+      letter-spacing: .05em;
+      color: var(--accent);
+      text-shadow: var(--glow);
+      text-decoration: none;
+    }
+
+    .logo span { color: var(--accent2); }
+
+    .nav-links {
+      display: flex; gap: 28px; list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .03em;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+
+    .search-wrap:focus-within { border-color: var(--accent); }
+
+    .search-wrap input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      padding: 8px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .88rem;
+      width: 200px;
+    }
+
+    .search-wrap input::placeholder { color: var(--muted); }
+
+    .search-btn {
+      background: var(--accent);
+      border: none;
+      color: #000;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 700;
+      transition: opacity .2s;
+    }
+
+    .search-btn:hover { opacity: .85; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 72px 32px 48px;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: 'Orbitron', monospace;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .15em;
+      color: var(--accent);
+      border: 1px solid rgba(0,240,160,.3);
+      border-radius: 20px;
+      padding: 5px 16px;
+      margin-bottom: 24px;
+      background: rgba(0,240,160,.06);
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -.01em;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      text-shadow: var(--glow);
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 300;
+      max-width: 520px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+    }
+
+    .stat { text-align: center; }
+
+    .stat-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: .78rem;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ── AD BANNER (top) ── */
+    .ad-banner {
+      margin: 0 32px 8px;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: .78rem;
+      letter-spacing: .05em;
+    }
+
+    /* ── CATEGORY PILLS ── */
+    .categories {
+      padding: 24px 32px 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .82rem;
+      font-weight: 500;
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .18s;
+      letter-spacing: .02em;
+    }
+
+    .pill:hover, .pill.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,240,160,.07);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 160px;
+      gap: 24px;
+      padding: 16px 32px 60px;
+    }
+
+    /* ── GAME GRID ── */
+    .section-label {
+      font-family: 'Orbitron', monospace;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── GAME CARD ── */
+    .game-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .18s, border-color .18s, box-shadow .18s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px rgba(0,240,160,.12);
+    }
+
+    .game-card:hover .play-overlay {
+      opacity: 1;
+    }
+
+    .game-thumb {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      display: block;
+      background: var(--surface);
+      position: relative;
+    }
+
+    /* Placeholder thumbnail with color */
+    .thumb-placeholder {
+      width: 100%;
+      aspect-ratio: 16/10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+    }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity .18s;
+    }
+
+    .play-btn-icon {
+      width: 44px; height: 44px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .play-btn-icon svg { margin-left: 3px; }
+
+    .card-body { padding: 12px 14px 14px; }
+
+    .card-title {
+      font-weight: 500;
+      font-size: .92rem;
+      color: var(--text);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-tag {
+      font-size: .7rem;
+      font-weight: 500;
+      color: var(--accent2);
+      letter-spacing: .04em;
+    }
+
+    .card-rating {
+      font-size: .72rem;
+      color: var(--muted);
+    }
+
+    .card-rating span { color: #f9cb42; }
+
+    /* New badge */
+    .badge-new {
+      position: absolute;
+      top: 8px; left: 8px;
+      font-family: 'Orbitron', monospace;
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      background: var(--accent);
+      color: #000;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .badge-hot {
+      position: absolute;
+      top: 8px; left: 8px;
+      font-family: 'Orbitron', monospace;
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      background: #e24b4a;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* ── AD SIDEBAR ── */
+    .ad-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ad-slot {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: .72rem;
+      letter-spacing: .05em;
+      writing-mode: horizontal-tb;
+      text-align: center;
+      padding: 16px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    .footer-links { display: flex; gap: 24px; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero { animation: fadeUp .5s ease both; }
+    .game-card { animation: fadeUp .4s ease both; }
+    .game-card:nth-child(2) { animation-delay: .05s; }
+    .game-card:nth-child(3) { animation-delay: .1s; }
+    .game-card:nth-child(4) { animation-delay: .15s; }
+    .game-card:nth-child(5) { animation-delay: .2s; }
+    .game-card:nth-child(6) { animation-delay: .25s; }
+    .game-card:nth-child(7) { animation-delay: .3s; }
+    .game-card:nth-child(8) { animation-delay: .35s; }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 18px; gap: 12px; flex-wrap: wrap; }
+      .nav-links { display: none; }
+      .main-layout { grid-template-columns: 1fr; padding: 12px 16px 48px; }
+      .ad-sidebar { flex-direction: row; overflow-x: auto; }
+      .ad-slot { min-height: 100px; min-width: 160px; }
+      .hero { padding: 48px 18px 32px; }
+      .categories { padding: 16px 18px; }
+      .ad-banner { margin: 0 18px 8px; }
+      .hero-stats { gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="index.html">Arcade<span>Vault</span></a>
+    <ul class="nav-links">
+      <li><a href="#">Action</a></li>
+      <li><a href="#">Puzzle</a></li>
+      <li><a href="#">Racing</a></li>
+      <li><a href="#">Sports</a></li>
+    </ul>
+    <div class="search-wrap">
+      <input type="text" placeholder="Search games..." id="searchInput" oninput="filterGames(this.value)">
+      <button class="search-btn" onclick="filterGames(document.getElementById('searchInput').value)">⌕</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">🎮 No Login · No Download · Always On</div>
+    <h1>Play Free Games<br><em>Unblocked.</em></h1>
+    <p>Hundreds of browser games — action, puzzle, racing, and Unity 3D titles — available anywhere, anytime.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Games</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Downloads</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">Free</div>
+        <div class="stat-label">Always</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOP AD BANNER -->
+  <div class="ad-banner">
+    <!-- AdSense leaderboard (728×90) — replace with your ad code -->
+    <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX"></ins> -->
+    [ Ad Banner 728×90 — Place AdSense code here ]
+  </div>
+
+  <!-- CATEGORY PILLS -->
+  <div class="categories">
+    <button class="pill active" onclick="setCategory('all', this)">All Games</button>
+    <button class="pill" onclick="setCategory('action', this)">Action</button>
+    <button class="pill" onclick="setCategory('puzzle', this)">Puzzle</button>
+    <button class="pill" onclick="setCategory('racing', this)">Racing</button>
+    <button class="pill" onclick="setCategory('sports', this)">Sports</button>
+    <button class="pill" onclick="setCategory('unity', this)">Unity 3D</button>
+    <button class="pill" onclick="setCategory('arcade', this)">Arcade</button>
+  </div>
+
+  <!-- MAIN: GRID + SIDEBAR -->
+  <div class="main-layout">
+    <div>
+      <div class="section-label">Featured Games</div>
+      <div class="game-grid" id="gameGrid">
+
+        <!-- CARD TEMPLATE — duplicate and edit for each game -->
+        <!-- For Unity games: href="games/your-game-folder/index.html" -->
+
+        <a class="game-card" href="games/game1/index.html" data-cat="unity" data-title="Space Runner 3D">
+          <div class="thumb-placeholder" style="background:linear-gradient(135deg,#0e1018,#1a0a2e)">
+            🚀
+            <div class="play-overlay">
+              <div class="play-btn-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#000"/></svg>
+              </div>
+            </div>
+          </div>
+          <span class="badge-new">NEW</span>
+          <div class="card-body">
+            <div class="card-title">Space Runner 3D</div>
+            <div class="card-meta">
+              <span class="card-tag">Unity 3D</span>
+              <span class="card-rating"><span>★</span> 4.8</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/game2/index.html" data-cat="action" data-title="Pixel Combat">
+          <div class="thumb-placeholder" style="background:linear-gradient(135deg,#0e1018,#1a0e0a)">
+            ⚔️
+            <div class="play-overlay">
+              <div class="play-btn-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#000"/></svg>
+              </div>
+            </div>
+          </div>
+          <span class="badge-hot">HOT</span>
+          <div class="card-body">
+            <div class="card-title">Pixel Combat</div>
+            <div class="card-meta">
+              <span class="card-tag">Action</span>
+              <span class="card-rating"><span>★</span> 4.6</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/game3/index.html" data-cat="puzzle" data-title="Block Maze">
+          <div class="thumb-placeholder" style="background:linear-gradient(135deg,#0a1a0e,#0e1018)">
+            🧩
+            <div class="play-overlay">
+              <div class="play-btn-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#000"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Block Maze</div>
+            <div class="card-meta">
+              <span class="card-tag">Puzzle</span>
+              <span class="card-rating"><span>★</span> 4.4</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/game4/index.html" data-cat="racing" data-title="Turbo Drift">
+          <div class="thumb-placeholder" style="background:linear-gradient(135deg,#1a1000,#0e1018)">
+            🏎️
+            <div class="play-overlay">
+              <div class="play-btn-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#000"/></svg>
+              </div>
+            </div>
+          </div>
+          <span class="badge-hot">HOT</span>
+          <div class="card-body">
+            <div class="card-title">Turbo Drift</div>
+            <div class="card-meta">
+              <span class="card-tag">Racing</span>
+              <span class="card-rating"><span>★</span> 4.7</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/game5/index.html" data-cat="unity" data-title="Castle Defense">
+          <div class="thumb-placeholder" style="background:linear-gradient(135deg,#0a0e1a,#1a0a1a)">
+            🏰
+            <div class="play-overlay">
+              <div class="play-btn-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#000"/></svg>
+              </div>
+            </div>
+          </div>
+          <span class="badge-new">NEW</span>
+          <div class="card-body">
+            <div class="card-title">Castle Defense</div>
+            <div class="card-meta">
+              <span class="card-tag">Unity 3D</span>
+              <span class="card-rating"><span>★</span> 4.5</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/game6/index.html" data-cat="arcade" data-title="Neon Snake">
+          <div class="thumb-placeholder" style="background:linear-gradient(135deg,#001a0e,#0e1018)">
+            🐍
+            <div class="play-overlay">
+              <div class="play-btn-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#000"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Neon Snake</div>
+            <div class="card-meta">
+              <span class="card-tag">Arcade</span>
+              <span class="card-rating"><span>★</span> 4.3</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/game7/index.html" data-cat="sports" data-title="Street Hoops">
+          <div class="thumb-placeholder" style="background:linear-gradient(135deg,#1a0800,#0e1018)">
+            🏀
+            <div class="play-overlay">
+              <div class="play-btn-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#000"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Street Hoops</div>
+            <div class="card-meta">
+              <span class="card-tag">Sports</span>
+              <span class="card-rating"><span>★</span> 4.2</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/game8/index.html" data-cat="unity" data-title="Galactic Wars">
+          <div class="thumb-placeholder" style="background:linear-gradient(135deg,#000a1a,#0e1018)">
+            🌌
+            <div class="play-overlay">
+              <div class="play-btn-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#000"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Galactic Wars</div>
+            <div class="card-meta">
+              <span class="card-tag">Unity 3D</span>
+              <span class="card-rating"><span>★</span> 4.9</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+      <!-- /game-grid -->
+    </div>
+
+    <!-- SIDEBAR ADS -->
+    <div class="ad-sidebar">
+      <div class="ad-slot">
+        <!-- AdSense 160×600 wide skyscraper -->
+        <!-- <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX"></ins> -->
+        Ad Slot<br>160×600
+      </div>
+      <div class="ad-slot">
+        <!-- AdSense 160×250 -->
+        <!-- <ins class="adsbygoogle" style="display:inline-block;width:160px;height:250px" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX"></ins> -->
+        Ad Slot<br>160×250
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 ArcadeVault — Free browser games, unblocked.</span>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+      <a href="#">DMCA</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // ── Category filter ──
+  function setCategory(cat, btn) {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.game-card').forEach(card => {
+      const match = cat === 'all' || card.dataset.cat === cat;
+      card.style.display = match ? 'block' : 'none';
+    });
+  }
+
+  // ── Search filter ──
+  function filterGames(q) {
+    const query = q.toLowerCase().trim();
+    document.querySelectorAll('.game-card').forEach(card => {
+      const title = card.dataset.title.toLowerCase();
+      card.style.display = (!query || title.includes(query)) ? 'block' : 'none';
+    });
+    // Reset category pills
+    if (query) {
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    }
+  }
+
+  // ── Init AdSense (uncomment when you have publisher ID) ──
+  // (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</body>
+</html>
